@@ -4,26 +4,22 @@
     {
       "src": "client/package.json",
       "use": "@vercel/static-build",
-      "config": { "distDir": "client/dist" }
+      "config": { "distDir": "dist" }
     },
     {
-      "src": "server/index.js",
+      "src": "server/package.json",
       "use": "@vercel/node"
     }
   ],
   "routes": [
     {
-      "src": "/api/(.*)",
+      "src": "^/api(.*)",
       "dest": "server/index.js"
     },
     {
-      "src": "/(.*)",
+      "src": "^/(.*)",
       "dest": "client/dist/$1"
     }
-  ],
-  "env": {
-    "MONGO_URI": "@mongo_uri",
-    "JWT_SECRET": "@jwt_secret",
-    "NODE_ENV": "production"
-  }
+  ]
 }
+
