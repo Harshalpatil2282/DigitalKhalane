@@ -69,13 +69,25 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// ─── 404 Handler ──────────────────────────────────────────────────────────────
-app.use((req, res) => {
-  res.status(404).json({
-    success: false,
-    message: `Route not found: ${req.method} ${req.path}`,
+// ─── Serve Static Files & React Client ────────────────────────────────────────
+// In production, serve the client build files from the dist folder
+if (process.env.NODE_ENV === 'production') {
+  const clientDistPath = path.join(__dirname, '../client/dist');
+  app.use(express.static(clientDistPath));
+  
+  // Catch-all handler to serve index.html for client-side routing
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(clientDistPath, 'index.html'));
   });
-});
+} else {
+  // ─── 404 Handler (Development) ────────────────────────────────────────────
+  app.use((req, res) => {
+    res.status(404).json({
+      success: false,
+      message: `Route not found: ${req.method} ${req.path}`,
+    });
+  });
+}
 
 // ─── Error Handler (MUST be last) ────────────────────────────────────────────
 app.use(require('./middleware/errorHandler'));
