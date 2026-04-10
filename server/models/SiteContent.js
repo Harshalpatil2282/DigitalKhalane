@@ -41,8 +41,8 @@ const siteContentSchema = new mongoose.Schema({
 
   // Contact details
   contactEmail: { type: String, default: 'info@digitalkhalane.in' },
-  contactPhone: { type: String, default: '+91 98765 43210' },
-  contactAddress: { type: String, default: 'Khalane Village, Nashik District, Maharashtra' },
+  contactPhone: { type: String, default: '+91 8600835109' },
+  contactAddress: { type: String, default: 'Khalane Village, tal Shindhkheda, Dist Dhule Maharashtra - 425407' },
 
   // Social Links
   facebookUrl: { type: String, default: '' },

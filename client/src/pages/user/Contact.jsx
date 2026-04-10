@@ -49,8 +49,8 @@ const Contact = () => {
                 Have questions about the festival, events, or registration? We'd love to hear from you!
               </p>
               {[
-                { icon:<MapPin size={22}/>, label:'Address', value: content?.contactAddress || 'Khalane Village, Maharashtra' },
-                { icon:<Phone size={22}/>, label:'Phone', value: content?.contactPhone || '+91 8530372289' },
+                { icon:<MapPin size={22}/>, label:'Address', value: content?.contactAddress || 'Khalane Village, tal Shindhkheda, Dist Dhule Maharashtra - 425407' },
+                { icon:<Phone size={22}/>, label:'Phone', value: content?.contactPhone || '+91 8600835109' },
                 { icon:<Mail size={22}/>,  label:'Email', value: content?.contactEmail || 'info@digitalkhalane.in' },
               ].map(({icon, label, value}) => (
                 <motion.div key={label} whileHover={{ x:4 }}

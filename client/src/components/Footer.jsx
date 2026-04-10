@@ -54,8 +54,8 @@ const Footer = () => {
 
           <div>
             <h4 style={heading}>{t('contactUs')}</h4>
-            <div style={contactItem}><MapPin size={16} style={{ color: '#FF6B00', flexShrink: 0 }} /><span>Khalane Village, Nashik District, Maharashtra - 422207</span></div>
-            <div style={contactItem}><Phone size={16} style={{ color: '#FF6B00', flexShrink: 0 }} /><span>+91 98765 43210</span></div>
+            <div style={contactItem}><MapPin size={16} style={{ color: '#FF6B00', flexShrink: 0 }} /><span>Khalane Village, tal Shindhkheda, Dist Dhule Maharashtra - 425407</span></div>
+            <div style={contactItem}><Phone size={16} style={{ color: '#FF6B00', flexShrink: 0 }} /><span>+91 8600835109</span></div>
             <div style={contactItem}><Mail size={16} style={{ color: '#FF6B00', flexShrink: 0 }} /><span>info@digitalkhalane.in</span></div>
           </div>
         </div>
