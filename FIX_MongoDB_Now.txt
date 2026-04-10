@@ -1,0 +1,219 @@
+# 🎯 FIX: Server Won't Start - MongoDB Issue
+
+## ❌ Current Problem
+```
+Error: connect ECONNREFUSED ::1:27017
+MongoDB not running on localhost:27017
+```
+
+## ✅ Solution: Pick ONE Option Below
+
+---
+
+## 🟢 EASIEST: Use MongoDB Atlas (3 minutes)
+
+### Step 1: Create Free Account
+```
+Go to: https://account.mongodb.com/account/register
+Email: your-email@gmail.com
+Password: strong-password
+```
+
+### Step 2: Create Cluster
+```
+After login → Click "CREATE DEPLOYMENT"
+Tier: FREE
+Region: Choose closest to you
+Click "CREATE"
+Wait 1-2 minutes...
+```
+
+### Step 3: Get Connection String
+```
+Click "CONNECT"
+→ Choose "Drivers"
+→ Select "Node.js"
+→ Copy the connection string
+```
+
+**You'll get something like:**
+```
+mongodb+srv://<username>:<password>@cluster0.xxxxx.mongodb.net/?retryWrites=true&w=majority
+```
+
+### Step 4: Update .env File
+**Edit:** `d:\DigitalKhalane\server\.env`
+
+Replace this:
+```
+MONGO_URI=mongodb://localhost:27017/digitalkhalane
+```
+
+With this (your atlas string):
+```
+MONGO_URI=mongodb+srv://username:password@cluster0.xxxxx.mongodb.net/digitalkhalane?w=majority
+```
+
+⚠️ Replace:
+- `username` with your MongoDB Atlas username
+- `password` with your MongoDB Atlas password  
+- `cluster0.xxxxx` with your actual cluster URL
+
+### Step 5: Start Server
+```bash
+cd d:\DigitalKhalane\server
+npm run dev
+```
+
+**You should see:**
+```
+✅ MongoDB Connected Successfully
+   Host: cluster0.xxxxx.mongodb.net
+   Database: digitalkhalane
+
+🎪  DigitalKhalane API Server Started
+🌐  http://localhost:5000
+```
+
+✅ **DONE!**
+
+---
+
+## 🟠 ALTERNATIVE: Use Docker
+
+**Prerequisites:** Docker installed
+
+```bash
+# From project root
+cd d:\DigitalKhalane
+
+# Run MongoDB in background
+docker-compose up -d mongodb
+
+# Wait 5 seconds for startup
+# Then start server:
+cd server
+npm run dev
+```
+
+Keep .env unchanged:
+```
+MONGO_URI=mongodb://localhost:27017/digitalkhalane
+```
+
+---
+
+## 🟡 ALTERNATIVE: Install MongoDB Locally
+
+### Windows Option 1: MongoDB Community
+1. Download: https://www.mongodb.com/try/download/community
+2. Run installer
+3. Accept defaults
+4. MongoDB starts automatically
+5. Done!
+
+### Windows Option 2: Windows Package Manager
+```bash
+choco install mongodb-community
+```
+
+### Verify Installation
+```bash
+# Open PowerShell and run:
+mongosh
+
+# Should show: test>
+# Type: exit
+```
+
+Then start server:
+```bash
+cd d:\DigitalKhalane\server
+npm run dev
+```
+
+---
+
+## 🚀 Recommended Path (DO THIS NOW)
+
+1. **Go to:** https://account.mongodb.com/account/register
+2. **Create free account** (5 min)
+3. **Create cluster** (2 min wait)
+4. **Copy connection string** (30 sec)
+5. **Update `.env` file** (1 min)
+6. **Run:** `npm run dev` (Done!)
+
+**Total time: ~10 minutes**
+
+---
+
+## ✅ After MongoDB is Set Up
+
+### Seed Default Data
+```bash
+cd d:\DigitalKhalane\server
+node utils/seed.js
+```
+
+Output should show:
+```
+✅ Admin user created → admin@digitalkhalane.in / khalane@2024
+✅ 8 events created
+```
+
+### Test Login
+```bash
+curl -X POST http://localhost:5000/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"admin@digitalkhalane.in","password":"khalane@2024"}'
+```
+
+Should return: `200 OK` + JWT token ✅
+
+---
+
+## 📋 Quick Checklist
+
+- [ ] MongoDB set up (Atlas/Docker/Local)
+- [ ] `.env` updated with correct MONGO_URI
+- [ ] Server started: `npm run dev`  
+- [ ] See "✅ MongoDB Connected Successfully"
+- [ ] Run: `node utils/seed.js`
+- [ ] See: "✅ Admin user created"
+- [ ] Test login works ✅
+
+---
+
+## 🆘 If Still Not Working
+
+### Error: "Cannot find module 'express-rate-limit'"
+```bash
+cd d:\DigitalKhalane\server
+npm install
+npm run dev
+```
+
+### Error: "connect ECONNREFUSED"
+MongoDB not running - pick ONE option above and follow steps
+
+### Error: "Authentication failed"
+Check your MONGO_URI in `.env` - credentials might be wrong
+
+### Error: "Cannot connect to MongoDB Atlas"
+- Make sure IP is whitelisted: MongoDB Atlas → Security → Network Access
+- Add your IP or "Allow Access from Anywhere" for development
+
+---
+
+## 📞 Still Need Help?
+
+1. Run complete logs: `npm run dev` (watch for error details)
+2. Check: `cat D:\DigitalKhalane\server\.env`
+3. Verify MongoDB URI format
+4. Try: `mongosh "your-connection-string"`
+
+---
+
+**STATUS:** Follow the RECOMMENDED PATH above and you'll be running in ~10 minutes! 🚀
+
+**Next:** Come back after MongoDB is set up and you see "✅ MongoDB Connected Successfully"

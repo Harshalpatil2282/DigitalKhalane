@@ -1,0 +1,13 @@
+{
+  "name": "digitalkhalane",
+  "version": "1.0.0",
+  "description": "> **Created by Harshal Parmeshvar Patil**   > Official digital platform for the **Khalane Yatra Utsav** festival — built with the MERN stack (MongoDB, Express.js, React.js, Node.js).",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs"
+}
