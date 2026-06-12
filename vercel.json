@@ -1,9 +1,9 @@
 {
   "version": 2,
-  "framework": null,
-  "buildCommand": "npm run build",
+  "buildCommand": "npm run vercel-build",
   "devCommand": "npm run dev",
   "installCommand": "npm install",
+  "framework": "vite",
   "regions": ["iad1"],
   "functions": {
     "server/api/**/*.js": {
@@ -11,24 +11,14 @@
       "runtime": "nodejs20.x"
     }
   },
-  "routes": [
+  "rewrites": [
     {
-      "src": "/api/(.*)",
-      "dest": "server/api/index.js",
-      "headers": {
-        "Access-Control-Allow-Credentials": "true",
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "GET,POST,PUT,DELETE,OPTIONS",
-        "Access-Control-Allow-Headers": "X-Requested-With, Content-Type, Authorization"
-      }
+      "source": "/api/(.*)",
+      "destination": "/server/api/index.js"
     },
     {
-      "src": "^/(?!api)(.*)",
-      "dest": "client/dist/$1"
-    },
-    {
-      "src": "/",
-      "dest": "client/dist/index.html"
+      "source": "/(.*)",
+      "destination": "/client/dist/index.html"
     }
   ],
   "headers": [
