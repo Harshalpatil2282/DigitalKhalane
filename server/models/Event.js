@@ -33,7 +33,8 @@ const eventSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Location is required'],
   },
-  image: { type: String, default: '' }, // path or URL
+  image: { type: String, default: '' }, // Cloudinary URL
+  publicId: { type: String, default: '' }, // Cloudinary public ID for deletion
   isFeatured: { type: Boolean, default: false },
   isActive: { type: Boolean, default: true },
   registrationRequired: { type: Boolean, default: false },

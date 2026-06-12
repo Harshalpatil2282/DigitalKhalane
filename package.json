@@ -2,15 +2,20 @@
   "name": "digitalkhalane",
   "version": "1.0.0",
   "description": "> **Created by Harshal Parmeshvar Patil**   > Official digital platform for the **Khalane Yatra Utsav** festival — built with the MERN stack (MongoDB, Express.js, React.js, Node.js).",
-  "main": "index.js",
+  "main": "server/index.js",
   "scripts": {
-    "build": "cd client && npm run build && cd ../server && npm install",
+    "build": "cd client && npm install && npm run build",
+    "vercel-build": "cd client && npm install && npm run build",
     "start": "cd server && npm start",
     "dev": "concurrently \"cd client && npm run dev\" \"cd server && npm run dev\"",
+    "seed": "cd server && npm run seed",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
+  "author": "Harshal Parmeshvar Patil",
   "license": "ISC",
-  "type": "commonjs"
+  "type": "commonjs",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
 }

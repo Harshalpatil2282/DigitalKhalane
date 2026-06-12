@@ -20,6 +20,7 @@ const gallerySchema = new mongoose.Schema({
     enum: ['photo', 'video'],
     default: 'photo',
   },
+  publicId: { type: String, default: '' }, // Cloudinary public ID for deletion
   year: {
     type: Number,
     default: new Date().getFullYear(),

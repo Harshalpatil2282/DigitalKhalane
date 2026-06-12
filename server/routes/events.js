@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { getEvents, getEvent, createEvent, updateEvent, deleteEvent } = require('../controllers/eventController');
 const { protect } = require('../middleware/auth');
-const upload = require('../middleware/upload');
+const { upload } = require('../middleware/upload');
 
 // Public
 router.get('/', getEvents);

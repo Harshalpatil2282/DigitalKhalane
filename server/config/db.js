@@ -1,9 +1,12 @@
 /**
- * MongoDB Database Connection
+ * MongoDB Database Connection with Caching for Serverless
  * DigitalKhalane Platform
  */
 
 const mongoose = require('mongoose');
+
+// Global cached connection for serverless
+let cachedConnection = null;
 
 const connectDB = async () => {
   try {
@@ -11,13 +14,24 @@ const connectDB = async () => {
       throw new Error('MONGO_URI environment variable is not defined');
     }
 
+    // Return cached connection if available and ready
+    if (cachedConnection && mongoose.connection.readyState === 1) {
+      return cachedConnection;
+    }
+
     console.log('📡 Attempting to connect to MongoDB...');
     console.log('🔗 Connection String (masked):', process.env.MONGO_URI.replace(/:(.*?)@/, ':****@'));
 
+    // Serverless-optimized connection options
     const conn = await mongoose.connect(process.env.MONGO_URI, {
-      serverSelectionTimeoutMS: 5000,
+      serverSelectionTimeoutMS: 10000,
       socketTimeoutMS: 45000,
+      maxPoolSize: 10,
+      minPoolSize: 0,
+      bufferCommands: false,
     });
+
+    cachedConnection = conn;
 
     console.log(`✅ MongoDB Connected Successfully`);
     console.log(`   Host: ${conn.connection.host}`);
@@ -27,6 +41,7 @@ const connectDB = async () => {
     // Handle connection events
     mongoose.connection.on('disconnected', () => {
       console.warn('⚠️ MongoDB disconnected');
+      cachedConnection = null;
     });
 
     mongoose.connection.on('error', (err) => {
@@ -39,14 +54,29 @@ const connectDB = async () => {
     console.error('   Error:', error.message);
     console.error('   Stack:', error.stack);
     
+    cachedConnection = null;
+    
     if (error.message.includes('MONGO_URI')) {
       console.error('\n⚠️  CRITICAL: MONGO_URI not configured');
       console.error('   Add MONGO_URI to your .env file');
       console.error('   Example: MONGO_URI=mongodb://localhost:27017/digitalkhalane');
     }
 
-    process.exit(1);
+    // Don't exit in serverless - let the function handle it
+    if (!process.env.VERCEL) {
+      process.exit(1);
+    }
+    throw error;
   }
 };
 
-module.exports = connectDB;
+// Helper to get connection status
+const getConnectionStatus = () => {
+  return {
+    readyState: mongoose.connection.readyState,
+    host: mongoose.connection.host,
+    name: mongoose.connection.name,
+  };
+};
+
+module.exports = { connectDB, getConnectionStatus };

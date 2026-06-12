@@ -1,6 +1,6 @@
 /**
  * DigitalKhalane - Khalane Yatra Utsav Platform
- * Main Server Entry Point
+ * Main Server Entry Point (Local Development Only)
  * Created by Harshal Parmeshvar Patil
  */
 
@@ -8,7 +8,7 @@ const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const path = require('path');
-const connectDB = require('./config/db');
+const { connectDB } = require('./config/db');
 
 // Load environment variables
 dotenv.config();
@@ -30,7 +30,21 @@ const app = express();
 
 // ─── Middleware ───────────────────────────────────────────────────────────────
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:5173',
+  origin: (origin, callback) => {
+    const allowedOrigins = [
+      process.env.CLIENT_URL,
+      'http://localhost:5173',
+      'http://localhost:3000',
+    ].filter(Boolean);
+    
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
 }));
 app.use(express.json({ limit: '10mb' }));
@@ -43,9 +57,6 @@ if (process.env.NODE_ENV === 'development') {
     next();
   });
 }
-
-// Serve uploaded files statically
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // ─── API Routes ───────────────────────────────────────────────────────────────
 app.use('/api/auth',          require('./routes/auth'));
@@ -70,8 +81,8 @@ app.get('/api/health', (req, res) => {
 });
 
 // ─── Serve Static Files & React Client ────────────────────────────────────────
-// In production, serve the client build files from the dist folder
-if (process.env.NODE_ENV === 'production') {
+// In production (non-Vercel), serve the client build files from the dist folder
+if (process.env.NODE_ENV === 'production' && !process.env.VERCEL) {
   const clientDistPath = path.join(__dirname, '../client/dist');
   app.use(express.static(clientDistPath));
   
@@ -104,16 +115,19 @@ process.on('uncaughtException', (err) => {
   process.exit(1);
 });
 
-// ─── Start Server ────────────────────────────────────────────────────────────
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`
+// ─── Start Server (Local Development Only) ───────────────────────────────────
+// Skip if running on Vercel (serverless)
+if (!process.env.VERCEL) {
+  const PORT = process.env.PORT || 5000;
+  app.listen(PORT, () => {
+    console.log(`
 ╔══════════════════════════════════════════════════╗
 ║   🎪  DigitalKhalane API Server Started          ║
 ║   🌐  http://localhost:${PORT}                      ║
 ║   👤  Created by Harshal Parmeshvar Patil        ║
 ╚══════════════════════════════════════════════════╝
-  `);
-});
+    `);
+  });
+}
 
 module.exports = app;
